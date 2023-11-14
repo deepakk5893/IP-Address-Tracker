@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>IP Address Tracker</title>
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+	<link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+	<label class="switch">
+    <input type="checkbox" id="darkModeToggle" onclick="toggleDarkMode()">
+    <span class="slider round"></span>
+  </label>
+
+	<div class="sidebar" id="sidebar">
+		<div class="historyContainer" id="historyContainer"></div>
+	</div>
+	<div class="main-content">
+		<h1>IP Address Tracker</h1>
+		<div class="input-section">
+			<input type="text" id="ipAddressInput" placeholder="Enter IP Address or Domain">
+			<button onclick="trackIP()">Track IP</button>
+		</div>
+		<div id="resultSection" class="result-section">
+		</div>
+		<div id="map" class="map-container">
+		</div>
+	</div>
+	<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+	<script src="script.js"></script>
+</body>
+
+</html>
