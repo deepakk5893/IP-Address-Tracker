@@ -1,15 +1,17 @@
+let map;
+
 async function trackIP() {
   const ipAddress = document.getElementById('ipAddressInput').value;
-  
+
   try {
     const response = await fetch(`https://ipinfo.io/${ipAddress}?token=2d2c074fefaf76`);
     if (response.ok) {
-			const data = await response.json();
-			addToHistory(data.ip);
-    	displayIPInfo(data);
-    }else{
-			displayError('IP address not found');
-		}
+      const data = await response.json();
+      addToHistory(data.ip);
+      displayIPInfo(data);
+    } else {
+      displayError('IP address not found');
+    }
   } catch (error) {
     displayError(error.message);
   }
@@ -29,12 +31,15 @@ function displayIPInfo(data) {
 }
 
 function displayMap(coordinates) {
-  debugger
-  const map = L.map('map').setView(coordinates, 13);
+  if (!map) {
+    map = L.map('map').setView(coordinates, 13);
 
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19,
-  }).addTo(map);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+    }).addTo(map);
+  } else {
+    map.setView(coordinates, 13); // Update the view if map already exists
+  }
 
   L.marker(coordinates).addTo(map);
 }
@@ -45,25 +50,25 @@ function displayError(errorMessage) {
 }
 
 function addToHistory(ip) {
-	let trackedIPs = JSON.parse(localStorage.getItem('previouslyTrackedIPs')) || [];
-	trackedIPs.push(ip);
-	localStorage.setItem('previouslyTrackedIPs', JSON.stringify(trackedIPs));
+  let trackedIPs = JSON.parse(localStorage.getItem('previouslyTrackedIPs')) || [];
+  trackedIPs.push(ip);
+  localStorage.setItem('previouslyTrackedIPs', JSON.stringify(trackedIPs));
   displayHistory()
 }
 
 function displayHistory() {
-	const trackedIPs = JSON.parse(localStorage.getItem('previouslyTrackedIPs')) || [];
-	const historyContainer = document.getElementById('historyContainer');
+  const trackedIPs = JSON.parse(localStorage.getItem('previouslyTrackedIPs')) || [];
+  const historyContainer = document.getElementById('historyContainer');
 
-	// Clear previous history if any
-	historyContainer.innerHTML = '';
+  // Clear previous history if any
+  historyContainer.innerHTML = '';
 
-	// Display each tracked IP in the history container
-	trackedIPs.forEach(ip => {
-			const historyItem = document.createElement('div');
-			historyItem.textContent = ip;
-			historyContainer.appendChild(historyItem);
-	});
+  // Display each tracked IP in the history container
+  trackedIPs.forEach(ip => {
+    const historyItem = document.createElement('div');
+    historyItem.textContent = ip;
+    historyContainer.appendChild(historyItem);
+  });
 }
 
 window.addEventListener('DOMContentLoaded', displayHistory);
